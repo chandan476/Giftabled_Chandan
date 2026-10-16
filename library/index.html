@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mini Library System</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+
+  <header>
+    <h1>Mini Library System</h1>
+    <p>A Python project by <b>Chandan Kumar</b></p>
+  </header>
+
+  <!-- CHECK: this section must match YOUR Python code. Edit the names. -->
+  <section>
+    <h2>About this project</h2>
+    <p>
+      The Mini Library System is a library manager I wrote in Python. It keeps
+      track of books and how many copies of each one are on the shelf. The
+      box further down is a JavaScript copy of the same idea, so you can try
+      it right here in the browser.
+    </p>
+
+    <h3>What it does</h3>
+    <ul>
+      <li>Adds a book with a title, an author and a number of copies. If the title is already
+          on the shelf (capital letters are ignored), the copies are added to that book
+          instead of making a duplicate.</li>
+      <li>Lets you borrow a book. One copy leaves the shelf, and the count can never go below zero.</li>
+      <li>Lets you return a book. One copy goes back on the shelf.</li>
+      <li>Saves the whole library to a JSON file and a CSV file.</li>
+    </ul>
+
+    <h3>The classes I wrote</h3>
+    <div class="table-wrap">
+      <table>
+        <caption>Classes in the Python version</caption>
+        <thead>
+          <tr><th scope="col">Class</th><th scope="col">What it holds</th><th scope="col">What it can do</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Book</code></td>
+            <td>title, author, copies</td>
+            <td>Describes one book on the shelf.</td>
+          </tr>
+          <tr>
+            <td><code>Library</code></td>
+            <td>a list of books</td>
+            <td><code>add_book</code>, <code>find_book</code>, <code>borrow</code>,
+                <code>return_book</code>, and saving to files.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The files it saves</h3>
+    <ul>
+      <li><code>library.json</code> holds the whole library with every detail, ready to be loaded back into Python.</li>
+      <li><code>library.csv</code> holds one row per book and opens in Excel.</li>
+    </ul>
+  </section>
+
+  <!-- the working demo -->
+  <section>
+    <h2>Try it: add a book</h2>
+
+    <form class="form" onsubmit="addBook(event)">
+      <div class="field">
+        <label for="t">Title</label>
+        <input id="t" type="text" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="a">Author</label>
+        <input id="a" type="text" autocomplete="off">
+      </div>
+      <div class="field small">
+        <label for="c">Copies</label>
+        <input id="c" type="number" value="1" min="1">
+      </div>
+      <button type="submit">Add book</button>
+    </form>
+
+    <!-- messages appear here, and a screen reader reads them out -->
+    <p id="status" role="status"></p>
+  </section>
+
+  <section>
+    <h2>Books on the shelf</h2>
+    <p class="totals">
+      The shelf holds <strong id="titleCount">0</strong> titles and
+      <strong id="copyCount">0</strong> copies.
+    </p>
+    <div id="shelf"></div>
+  </section>
+
+  <footer>
+    <p>Built with HTML, CSS and JavaScript. The Python version lives on my GitHub.</p>
+  </footer>
+
+</main>
+
+<!-- the script must stay the last thing before the closing body tag -->
+<script src="script.js"></script>
+</body>
+</html>

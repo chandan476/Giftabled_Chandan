@@ -1,0 +1,146 @@
+/* ---- colours: change them here and the whole page follows ---- */
+:root {
+  --ink: #1b2430;
+  --muted: #566270;
+  --accent: #0b5563;
+  --accent-soft: #dff0f2;
+  --line: #d5dde3;
+  --page: #e9eef2;
+  --warn: #7a4300;   /* used when a book has no copies left */
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 24px 16px;
+  background: var(--page);
+  color: var(--ink);
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+main { max-width: 900px; margin: 0 auto; }
+
+/* keyboard users can always see where they are */
+:focus-visible { outline: 3px solid #f2a900; outline-offset: 2px; }
+
+/* ---- top band ---- */
+header {
+  background: var(--accent);
+  color: #ffffff;
+  padding: 28px 32px;
+  border-radius: 10px;
+}
+
+h1 { margin: 0 0 4px 0; font-size: 38px; line-height: 1.15; }
+header p { margin: 0; color: #cfe8ec; }
+
+/* ---- white panels ---- */
+section {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 22px 28px;
+  margin-top: 18px;
+}
+
+h2 { margin: 0 0 12px 0; font-size: 22px; color: var(--accent); }
+h3 { margin: 20px 0 6px 0; font-size: 17px; }
+section p { margin: 0 0 10px 0; }
+
+code {
+  background: var(--accent-soft);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.92em;
+}
+
+/* ---- the classes table ---- */
+.table-wrap { overflow-x: auto; }
+
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+caption { text-align: left; font-weight: bold; padding-bottom: 6px; }
+
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+th { background: var(--accent-soft); }
+
+/* ---- the add-a-book form ---- */
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.field { display: flex; flex-direction: column; flex: 1 1 170px; }
+.field.small { flex: 0 1 100px; }
+
+label { font-weight: bold; font-size: 15px; margin-bottom: 4px; }
+
+input {
+  padding: 9px 11px;
+  border: 1px solid #7d8a96;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: inherit;
+}
+
+button {
+  background: var(--accent);
+  color: #ffffff;
+  border: 2px solid var(--accent);
+  padding: 9px 18px;
+  border-radius: 5px;
+  font-size: 15px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+button:hover { background: #0e6b7d; border-color: #0e6b7d; }
+
+/* the Return button looks lighter than Borrow */
+button.plain { background: #ffffff; color: var(--accent); }
+button.plain:hover { background: var(--accent-soft); }
+
+#status {
+  min-height: 1.6em;
+  margin: 12px 0 0 0;
+  font-weight: bold;
+  color: var(--accent);
+}
+
+/* ---- the shelf ---- */
+.totals { font-size: 18px; }
+
+.book {
+  border-left: 4px solid var(--accent);
+  background: #f5f8fa;
+  padding: 12px 18px;
+  margin-bottom: 12px;
+}
+
+.book h3 { margin: 0; }
+.book .author { margin: 2px 0; color: var(--muted); }
+.book .count { margin: 4px 0 10px 0; font-weight: bold; }
+.book .count.out { color: var(--warn); }
+.book button { margin-right: 6px; }
+
+footer {
+  margin: 24px 0 8px 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ---- phone ---- */
+@media (max-width: 600px) {
+  body { padding: 12px; }
+  header, section { padding: 18px; }
+  h1 { font-size: 30px; }
+}

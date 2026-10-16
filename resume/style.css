@@ -1,0 +1,130 @@
+/* ---- colours: change them here and the whole page follows ---- */
+:root {
+  --ink: #1b2430;          /* main text */
+  --muted: #566270;        /* grey text */
+  --accent: #0b5563;       /* the one main colour (deep teal) */
+  --accent-soft: #dff0f2;  /* pale version of the accent */
+  --line: #d5dde3;         /* thin grey lines */
+  --page: #e9eef2;         /* colour behind the white sheet */
+}
+
+/* ---- the basics ---- */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 32px 16px;
+  background: var(--page);
+  color: var(--ink);
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+/* the white sheet, centred on the page */
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+a { color: var(--accent); }
+a:focus-visible { outline: 3px solid #f2a900; outline-offset: 2px; }
+
+/* ---- the top band: the one bold thing on the page ---- */
+header {
+  background: var(--accent);
+  color: #ffffff;
+  padding: 36px 44px 30px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 44px;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+
+.role {
+  margin: 8px 0 0 0;
+  font-size: 20px;
+  color: #cfe8ec;
+}
+
+.contact {
+  margin: 14px 0 0 0;
+  font-size: 15px;
+}
+
+.contact a { color: #ffffff; }
+
+/* ---- each section ---- */
+section {
+  padding: 0 44px;
+  margin-top: 32px;
+}
+
+h2 {
+  margin: 0 0 12px 0;
+  font-size: 22px;
+  color: var(--accent);
+  border-bottom: 2px solid var(--line);
+  padding-bottom: 6px;
+}
+
+/* ---- skills shown side by side ---- */
+.skills {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skills li {
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 15px;
+}
+
+/* ---- project cards ---- */
+.project {
+  border-left: 4px solid var(--accent);
+  background: #f5f8fa;
+  padding: 12px 18px;
+  margin-bottom: 14px;
+}
+
+.project h3 { margin: 0 0 6px 0; font-size: 18px; }
+.project p { margin: 6px 0; }
+
+.project .tags {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* ---- footer ---- */
+footer {
+  margin-top: 36px;
+  padding: 16px 44px 24px 44px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+}
+
+footer p { margin: 0; }
+
+/* ---- make it work on a phone ---- */
+@media (max-width: 600px) {
+  body { padding: 0; }
+  main { border-radius: 0; }
+  header { padding: 28px 20px 24px 20px; }
+  h1 { font-size: 32px; }
+  section { padding: 0 20px; }
+  footer { padding: 16px 20px 24px 20px; }
+}
