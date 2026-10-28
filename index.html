@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Personal Expense Tracker</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
+    label { display: block; margin-bottom: 0.6rem; }
+    input, select { margin-left: 0.5rem; padding: 0.3rem; }
+    table { border-collapse: collapse; width: 100%; margin-top: 0.5rem; }
+    th, td { border: 1px solid #8886; padding: 0.4rem 0.6rem; text-align: left; }
+    #message { font-weight: bold; min-height: 1.3em; }
+    .ok { color: #2ea043; }
+    .error { color: #d6452f; }
+  </style>
+</head>
+<body>
+
+  <h1>Personal Expense Tracker</h1>
+
+  <h3>Expense details</h3>
+  <label>Description: <input type="text" id="description" placeholder="Lunch"></label>
+  <label>Amount: <input type="number" id="amount" step="0.01" placeholder="120"></label>
+  <label>Category:
+    <select id="category">
+      <option>Food</option>
+      <option>Travel</option>
+      <option>Shopping</option>
+      <option>Bills</option>
+      <option>Other</option>
+    </select>
+  </label>
+  <button onclick="addExpense()">Add Expense</button>
+  <button onclick="viewExpenses()">View Expenses</button>
+
+  <h3>Update or delete by ID</h3>
+  <p>To update, fill in the new details above, type the ID, and click Update.</p>
+  <label>Expense ID: <input type="number" id="expenseId" min="1" placeholder="1"></label>
+  <button onclick="updateExpense()">Update Expense</button>
+  <button onclick="deleteExpense()">Delete Expense</button>
+
+  <p id="message" role="status"></p>
+
+  <h3>All expenses</h3>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Description</th><th>Amount</th><th>Category</th></tr>
+    </thead>
+    <tbody id="expenseRows"></tbody>
+  </table>
+  <p>Total spent: <strong id="total">0.00</strong></p>
+
+  <script>
+    const API = "http://127.0.0.1:8000/expenses";
+
+    function showMessage(text, ok) {
+      const message = document.getElementById("message");
+      message.textContent = text;
+      message.className = ok ? "ok" : "error";
+    }
+
+    // Read the form, check it, and return the expense (or null if it is invalid)
+    function readForm() {
+      const description = document.getElementById("description").value.trim();
+      const amount = Number(document.getElementById("amount").value); // text -> number
+      const category = document.getElementById("category").value;
+
+      if (description === "") {
+        showMessage("Description cannot be empty.", false);
+        return null;
+      }
+      if (isNaN(amount) || amount <= 0) {
+        showMessage("Amount must be greater than zero.", false);
+        return null;
+      }
+      return { description: description, amount: amount, category: category };
+    }
+
+    // Read the ID box and return it as a number (or null if it is invalid)
+    function readId() {
+      const text = document.getElementById("expenseId").value;
+      const id = Number(text);
+      if (text === "" || !Number.isInteger(id) || id < 1) {
+        showMessage("Please enter a valid expense ID.", false);
+        return null;
+      }
+      return id;
+    }
+
+    function clearForm() {
+      document.getElementById("description").value = "";
+      document.getElementById("amount").value = "";
+      document.getElementById("expenseId").value = "";
+    }
+
+    // One place for fetch: sends the request and returns the reply, or null on any error
+    async function callApi(url, method, body) {
+      try {
+        const response = await fetch(url, {
+          method: method,
+          headers: { "Content-Type": "application/json" },
+          body: body ? JSON.stringify(body) : undefined
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          showMessage(typeof data.detail === "string" ? data.detail : "Invalid data.", false);
+          return null;
+        }
+        return data;
+      } catch (error) {
+        showMessage("Cannot reach the server. Is it running?", false);
+        return null;
+      }
+    }
+
+    // 1. ADD (POST)
+    async function addExpense() {
+      const expense = readForm();
+      if (expense === null) return;
+
+      const data = await callApi(API, "POST", expense);
+      if (data) {
+        showMessage(data.message + " (ID " + data.expense.id + ")", true);
+        clearForm();
+        viewExpenses();
+      }
+    }
+
+    // 2. VIEW (GET)
+    async function viewExpenses() {
+      const expenses = await callApi(API, "GET");
+      if (expenses === null) return;
+
+      const rows = document.getElementById("expenseRows");
+      rows.innerHTML = "";
+
+      if (expenses.length === 0) {
+        const cell = rows.insertRow().insertCell();
+        cell.colSpan = 4;
+        cell.textContent = "No expenses yet.";
+      }
+
+      let total = 0;
+      expenses.forEach(function (expense) {
+        const tr = rows.insertRow();
+        tr.insertCell().textContent = expense.id;
+        tr.insertCell().textContent = expense.description;
+        tr.insertCell().textContent = expense.amount.toFixed(2);
+        tr.insertCell().textContent = expense.category;
+        total += expense.amount;
+      });
+
+      document.getElementById("total").textContent = total.toFixed(2);
+    }
+
+    // 3. UPDATE (PUT)
+    async function updateExpense() {
+      const id = readId();
+      if (id === null) return;
+      const expense = readForm();
+      if (expense === null) return;
+
+      const data = await callApi(API + "/" + id, "PUT", expense);
+      if (data) {
+        showMessage(data.message + " (ID " + id + ")", true);
+        clearForm();
+        viewExpenses();
+      }
+    }
+
+    // 4. DELETE
+    async function deleteExpense() {
+      const id = readId();
+      if (id === null) return;
+
+      const data = await callApi(API + "/" + id, "DELETE");
+      if (data) {
+        showMessage(data.message + " (ID " + id + ")", true);
+        clearForm();
+        viewExpenses();
+      }
+    }
+
+    // Show any existing expenses when the page opens
+    viewExpenses();
+  </script>
+
+</body>
+</html>
